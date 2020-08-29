@@ -3,6 +3,7 @@ package com.java.netty.chapter2;
 import java.net.InetSocketAddress;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -10,6 +11,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.CharsetUtil;
 
 public class EchoClient {
 	private final String host;
@@ -43,6 +45,7 @@ public class EchoClient {
 			});
 		//如果未连接则一直阻塞
 		ChannelFuture f = b.connect().sync();
+		f.channel().writeAndFlush(Unpooled.copiedBuffer("haha",CharsetUtil.UTF_8));
 		//未关闭则一致阻塞
 		f.channel().closeFuture().sync();
 		} finally {

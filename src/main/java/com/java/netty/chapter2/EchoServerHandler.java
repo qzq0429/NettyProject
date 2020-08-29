@@ -25,7 +25,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Server read Complete");
 		//当channel读取数据完毕，在输出一个buffer里面数据为空，writeAndFlush返回一个channelFuture，再添加一个操作关闭的Listener监听器
 		ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
 		

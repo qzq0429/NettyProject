@@ -14,10 +14,15 @@ public class EchoClientHandler
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
-		ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rocks!",CharsetUtil.UTF_8));
+		ctx.write(Unpooled.copiedBuffer("client connected active!",CharsetUtil.UTF_8));
 	}
 
-
+	@Override
+	public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("client registered active!");
+		ctx.writeAndFlush(Unpooled.copiedBuffer("client registered active!",CharsetUtil.UTF_8));
+	}
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// TODO Auto-generated method stub
@@ -31,5 +36,5 @@ public class EchoClientHandler
 		System.out.println(
                 "Client received: " + msg.toString(CharsetUtil.UTF_8));
 	}
-	
+
 }

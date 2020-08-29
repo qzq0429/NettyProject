@@ -46,7 +46,7 @@ public class EchoServer {
 		System.out.println(EchoServer.class.getName() + 
 				" started and listening for connections on " + f.channel());
 
-			f.channel().closeFuture().sync();
+		f.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			group.shutdownGracefully().sync();
