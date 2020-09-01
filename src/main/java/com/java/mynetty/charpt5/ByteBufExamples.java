@@ -1,4 +1,4 @@
-package com.java.netty.chapter4;
+package com.java.mynetty.charpt5;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -67,17 +67,9 @@ public class ByteBufExamples {
 
 	}
 	
-	public static void byteBufCompositeArray() {
-		CompositeByteBuf compBuf = Unpooled.compositeBuffer();
-		int length = compBuf.readableBytes();
-		byte[] array = new byte[length];
-		compBuf.getBytes(compBuf.readerIndex(), array);
-		handleArray(array,0,array.length);
-	}
-	
 	public static void byteBufRelativeAccess() {
 		ByteBuf buffer = BYTE_BUF_FROM_SOMEWHERE;
-		for(int i = 0; i <buffer.capacity();i++) {
+		for(int i=0;i<buffer.capacity();i++) {
 			byte b = buffer.getByte(i);
 			System.out.println(b);
 		}
@@ -85,6 +77,7 @@ public class ByteBufExamples {
 	
 	public static void readAllData() {
 		ByteBuf buffer = BYTE_BUF_FROM_SOMEWHERE;
+		//byteBufProcessor();
 		while(buffer.isReadable()) {
 			System.out.println(buffer.readByte());
 		}
@@ -92,83 +85,77 @@ public class ByteBufExamples {
 	
 	public static void write() {
 		ByteBuf buffer = BYTE_BUF_FROM_SOMEWHERE;
-		while(buffer.writableBytes() >= 4 ) {
+		buffer.writeByte((byte) '\r');
+		while(buffer.writableBytes()>4) {
 			buffer.writeInt(random.nextInt());
 		}
 	}
 	
 	public static void byteBufProcessor() {
 		ByteBuf buffer = BYTE_BUF_FROM_SOMEWHERE;
-		int index = buffer.forEachByte(ByteProcessor.FIND_CR);// @formatter:off
-		// @formatter:on
+		int index = buffer.forEachByte(ByteProcessor.FIND_CR);
+		System.out.println("index: "+index);
 	}
 	
 	public static void byteBufSlice() {
 		Charset utf8 = Charset.forName("UTF-8");
 		ByteBuf buf = Unpooled.copiedBuffer("Netty in Action rocks",utf8);
-		ByteBuf sliced = buf.slice(0,15);
+		ByteBuf sliced = buf.slice(0, 15);
 		System.out.println(sliced.toString(utf8));
-		buf.setByte(0,(byte)'J');
+		buf.setByte(0, (byte)'J');
 		assert buf.getByte(0) == sliced.getByte(0);
+		System.out.println(buf.toString(utf8));
 	}
 	
 	public static void byteBufCopy() {
 		Charset utf8 = Charset.forName("UTF-8");
-		
 		ByteBuf buf = Unpooled.copiedBuffer("Netty in Action rocks!",utf8);
-		ByteBuf copy = buf.copy(0, 15);
-		System.out.println(copy.toString(utf8));
-		buf.setByte(0, (byte)'J');
-		assert buf.getByte(0) != copy.getByte(0);
+		ByteBuf cpy = buf.copy();
+		cpy.setByte(0, (byte)'J');
+		System.out.println(cpy.toString(utf8));
+		System.out.println(buf.toString(utf8));
 	}
 	
+	
 	public static void byteBufSetGet() {
-		
 		Charset utf8 = Charset.forName("UTF-8");
 		ByteBuf buf = Unpooled.copiedBuffer("Netty in Action rocks!",utf8);
-		System.out.println((char)buf.getByte(0));
 		int readerIndex = buf.readerIndex();
 		int writerIndex = buf.writerIndex();
-		buf.setByte(0,(byte)'B');
-		System.out.println((char)buf.getByte(0));
-		assert readerIndex == buf.readerIndex();
-		assert writerIndex == buf.writerIndex();
+		System.out.println(buf.toString(utf8) +  "readerIndex: "+buf.readerIndex()+" , "+"writerIndex: "+buf.writerIndex());
+		buf.setByte(0, (byte)'B');
+		System.out.println(buf.toString(utf8)+ "readerIndex: "+buf.readerIndex()+" , "+"writerIndex: "+buf.writerIndex());
 	}
 	
 	public static void byteBufWriteRead() {
-		Charset utf8 = Charset.forName("UTF-8"); 
+		Charset utf8 = Charset.forName("UTF-8");
 		ByteBuf buf = Unpooled.copiedBuffer("Netty in Action rocks!",utf8);
-		System.out.println((char)buf.readByte());
 		int readerIndex = buf.readerIndex();
 		int writerIndex = buf.writerIndex();
-		
+		System.out.println(buf.toString(utf8) +  "readerIndex: "+buf.readerIndex()+" , "+"writerIndex: "+buf.writerIndex());
 		buf.writeByte((byte)'?');
+		System.out.println(buf.toString(utf8)+ 
+				"readerIndex: "+buf.readerIndex()+" , "
+				+"writerIndex: "+buf.writerIndex()+" , "
+				+"cap: "+buf.capacity()+" , "
+				+"isReadable: "+buf.isReadable()+" , "
+				+"isWritable: "+buf.isWritable()+" , "
+				+"readableBytes: "+buf.readableBytes()+" , "
+				+"writableBytes: "+buf.writableBytes()+" , "
+				+"capacity: "+buf.capacity()+" , "
+				+"maxCapacity: "+buf.maxCapacity()+" , "
+				+"hasArray: "+buf.hasArray()+" , "
+				+"array: "+buf.array()+" , "
+				);
 		
-		assert readerIndex == buf.readerIndex();
-		assert writerIndex != buf.writerIndex();
 	}
-	
 	public static void main(String[] args) {
-		 byteBufSetGet();
-		 byteBufWriteRead();
-	}
-	
-	public static void obtainingByteBufAllocatorRefence() {
-		Channel channel = CHANNEL_FROM_SOMEWHERE;
-		ByteBufAllocator allocator = channel.alloc();
-		ChannelHandlerContext ctx = CHANNEL_HANDLER_CONTEXT_FROM_SOMEWHERE;
-		ctx.alloc();
-	}
-	
-	public static void referenceCounting() {
-		Channel channel = CHANNEL_FROM_SOMEWHERE;
-		ByteBufAllocator allocator = channel.alloc();
-		ByteBuf buffer = allocator.directBuffer();
-		assert buffer.refCnt() == 1;
-	}
-	
-	public static void releaseReferenceCountedObject() {
-		ByteBuf buffer = BYTE_BUF_FROM_SOMEWHERE;
-		boolean released = buffer.release();
+//		byteBufRelativeAccess();
+//		write();
+//		readAllData();
+//		byteBufSlice();
+//		 byteBufCopy();
+		byteBufSetGet();
+		byteBufWriteRead();
 	}
 }
