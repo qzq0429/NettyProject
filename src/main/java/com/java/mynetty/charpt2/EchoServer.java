@@ -1,6 +1,8 @@
 package com.java.mynetty.charpt2;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -30,7 +32,16 @@ public class EchoServer {
 				ch.pipeline().addLast(echoServerHandler);
 			}
 			});
+		
 		ChannelFuture f = bootstrap.bind().sync();
+		ScheduledFuture<?> future = f.channel().eventLoop().schedule(
+				new Runnable() {
+					public void run() {
+						// TODO Auto-generated method stub
+						System.out.println("Hello World!");
+					}
+				},60,TimeUnit.SECONDS
+				);	
 		System.out.println(EchoServer.class.getName() + 
 				" started and listening for connections on " + f.channel());
 		f.channel().closeFuture().sync();
@@ -39,7 +50,7 @@ public class EchoServer {
 			// TODO: handle exception
 		}
 			
-			
+
 			
 	}
 }

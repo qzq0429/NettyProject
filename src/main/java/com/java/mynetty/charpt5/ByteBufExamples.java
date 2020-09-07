@@ -127,6 +127,13 @@ public class ByteBufExamples {
 		System.out.println(buf.toString(utf8)+ "readerIndex: "+buf.readerIndex()+" , "+"writerIndex: "+buf.writerIndex());
 	}
 	
+	public static void referenceCounting() {
+		Channel channel = CHANNEL_FROM_SOMEWHERE;
+		ByteBufAllocator allocator = channel.alloc();
+		ByteBuf buffer = allocator.directBuffer();
+		if(buffer.refCnt() == 2) System.out.println(false);;
+	}
+	
 	public static void byteBufWriteRead() {
 		Charset utf8 = Charset.forName("UTF-8");
 		ByteBuf buf = Unpooled.copiedBuffer("Netty in Action rocks!",utf8);
@@ -155,7 +162,12 @@ public class ByteBufExamples {
 //		readAllData();
 //		byteBufSlice();
 //		 byteBufCopy();
-		byteBufSetGet();
-		byteBufWriteRead();
+//		byteBufSetGet();
+//		byteBufWriteRead();
+		Channel channel = CHANNEL_FROM_SOMEWHERE;
+		ByteBufAllocator allocator = channel.alloc();
+		ByteBuf buffer = allocator.directBuffer();
+		
+		referenceCounting();
 	}
 }

@@ -1,5 +1,6 @@
 package com.java.netty.chapter7;
 
+import java.util.Stack;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,9 +48,13 @@ public class ScheduleExamples {
 				}, 60, 60, TimeUnit.SECONDS);
 	}
 	
+	/***
+	 * 
+	 */
 	public static void cancelingTaskUsingScheduledFuture() {
 		Channel ch = CHANNEL_FROM_SOMEWHERE;
-		
+		Stack stack = new Stack();
+	
 		ScheduledFuture<?> future = ch.eventLoop().scheduleAtFixedRate(
 				new Runnable() {
 					public void run() {

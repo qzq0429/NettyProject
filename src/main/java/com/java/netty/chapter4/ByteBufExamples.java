@@ -170,5 +170,6 @@ public class ByteBufExamples {
 	public static void releaseReferenceCountedObject() {
 		ByteBuf buffer = BYTE_BUF_FROM_SOMEWHERE;
 		boolean released = buffer.release();
+
 	}
 }
