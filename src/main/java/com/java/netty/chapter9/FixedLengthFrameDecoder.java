@@ -13,7 +13,7 @@ public class FixedLengthFrameDecoder extends ByteToMessageDecoder {
 		// TODO Auto-generated constructor stub
 		if(frameLength <= 0) {
 			throw new IllegalArgumentException(
-					"frameLength must be a positive integer: " + this.frameLength
+					"frameLength must be a positive integer: " + frameLength
 					);
 		}
 		this.frameLength = frameLength;
